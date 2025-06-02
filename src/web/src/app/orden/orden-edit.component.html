@@ -1,0 +1,22 @@
+<h2>Cambiar Estado de una Orden</h2>
+
+<div>
+  <label for="idOrden">ID de Orden:</label>
+  <input type="number" id="idOrden" [(ngModel)]="idOrdenSeleccionada" />
+</div>
+
+<div>
+  <label for="nuevoEstado">Nuevo Estado:</label>
+  <select id="nuevoEstado" [(ngModel)]="nuevoEstadoSeleccionado">
+    <option *ngFor="let estado of estados" [value]="estado.valor">{{ estado.nombre }}</option>
+  </select>
+</div>
+
+<div>
+  <button (click)="actualizarEstado()">Actualizar Estado</button>
+</div>
+
+<div *ngIf="mensajeConfirmacion" style="margin-top: 10px; color: darkred;">
+  {{ mensajeConfirmacion }}
+</div>
+

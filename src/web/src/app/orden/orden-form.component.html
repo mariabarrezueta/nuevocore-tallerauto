@@ -1,0 +1,16 @@
+<h2>Crear Orden de Trabajo</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <label>Vehículo ID</label>
+  <input formControlName="vehiculoID" type="number">
+  <br>
+  <label>Tipo de Reparación</label>
+  <select formControlName="tipoReparacion">
+    <option *ngFor="let cat of categorias" [value]="cat.value">{{ cat.text }}</option>
+  </select>
+  <button type="submit">Crear Orden</button>
+</form>
+<div *ngIf="mecanicoRecomendado">
+  <p>Mecánico sugerido: <strong>{{ mecanicoRecomendado.nombre }}</strong></p>
+</div>
+
+  

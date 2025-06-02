@@ -1,0 +1,40 @@
+<h2>Listado de Órdenes de Trabajo</h2>
+<table border="1">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Vehículo</th>
+        <th>Placa</th>
+        <th>Tipo Reparación</th>
+        <th>Mecánico Asignado</th>
+        <th>Estado</th>
+        <th>Fecha Ingreso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let orden of ordenes">
+        <td>{{ orden.IDOrden }}</td>
+        <td>{{ orden.Vehiculo?.Marca }} {{ orden.vehiculo?.modelo }}</td>
+        <td>{{ orden.Vehiculo?.Placa }}</td>
+        <td>{{ orden.TipoReparacion }}</td>
+        <td>{{ orden.MecanicoAsignado?.Nombre || 'No asignado' }}</td>
+        <td>
+          {{
+            orden.Estado === 0
+            ? 'Pendiente'
+            : orden.Estado === 1
+            ? 'En Proceso'
+            : orden.Estado === 2
+            ? 'Finalizada'
+            : orden.Estado === 3
+            ? 'Entregada'
+            : 'Desconocido'
+              
+          }}
+        </td>
+        <td>{{ orden.FechaIngreso | date: 'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
