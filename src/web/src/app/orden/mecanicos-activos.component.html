@@ -1,0 +1,20 @@
+<h2>Listado de Mecánicos y Órdenes Activas</h2>
+
+<button (click)="ordenarPorOrdenes()">Ordenar por órdenes activas (mayor a menor)</button>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Especialidad</th>
+      <th>Órdenes Activas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let mecanico of mecanicos">
+      <td>{{ mecanico.nombre }}</td>
+      <td>{{ mecanico.especialidad }}</td>
+      <td>{{ mecanico.ordenesActivas }}</td>
+    </tr>
+  </tbody>
+</table>

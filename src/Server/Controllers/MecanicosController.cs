@@ -47,7 +47,7 @@ public class MecanicosController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CrearMecanico([FromBody] Mecanico nuevo)
     {
-        // ⚡ Aseguramos que siempre se inicie con 0 órdenes activas
+        // Aseguramos que siempre se inicie con 0 órdenes activas
         nuevo.OrdenesActivas = 0;
 
         _db.Mecanicos.Add(nuevo);
@@ -55,6 +55,25 @@ public class MecanicosController : ControllerBase
 
         return CreatedAtAction(nameof(GetAll), new { id = nuevo.IDMecanico }, nuevo);
     }
+
+    [HttpGet("activos")]
+    public async Task<ActionResult<IEnumerable<Mecanico>>> GetMecanicosActivos()
+    {
+        try
+        {
+            var mecanicos = await _db.Mecanicos
+                .OrderByDescending(m => m.OrdenesActivas) // ⚡ Ordena de mayor a menor
+                .ToListAsync();
+
+            return Ok(mecanicos);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error al obtener mecánicos activos: {ex.Message}");
+        }
+    }
+
+
 }
 
 

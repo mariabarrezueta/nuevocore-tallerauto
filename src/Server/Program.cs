@@ -5,18 +5,19 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CORS --- (opcional si sirves Angular desde el backend directamente)
+// --- CORS --- Configura la política de CORS para permitir Angular en puerto 4200
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials(); // <-- ¡IMPORTANTE! si usas cookies o autenticación
     });
 });
 
-// --- JSON Options (previene ciclos y mejora el debug JSON) ---
+// --- JSON Options (para evitar ciclos y mejorar JSON) ---
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -36,11 +37,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // --- Middleware ---
+// ¡ACTIVA CORS antes de MVC!
 app.UseCors("AllowAngularApp");
-
-// Servir archivos Angular desde wwwroot
-app.UseDefaultFiles();     // <-- para servir index.html
-app.UseStaticFiles();      // <-- para servir JS, CSS, etc
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -50,9 +48,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ruta fallback para Angular (SPA)
+// --- Fallback para Angular ---
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
+// --- Migraciones automáticas ---
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -60,4 +61,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+
 
